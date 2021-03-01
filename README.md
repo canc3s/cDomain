@@ -1,6 +1,8 @@
 # cDomain
  利用天眼查查询企业备案
 
+[下载地址](https://github.com/canc3s/cDomain/releases)
+
 ## 介绍
 
 可以通过两种方式查询自己想要的企业子公司
