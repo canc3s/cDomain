@@ -18,7 +18,7 @@ const banner = `
 							v`
 
 // Version is the current version of C
-const Version = `0.0.4`
+const Version = `0.0.5`
 
 
 type Options struct {
@@ -26,6 +26,7 @@ type Options struct {
 	CompanyID			string                 // Target is a single URL/Domain to scan usng a template
 	InputFile			string                 // Targets specifies the targets to scan using templates.
 	Cookie				string
+	Delay				int
 	Timeout 			int
 	Output              string                 // Output is the file to write found subdomains to.
 	Silent				bool
@@ -41,7 +42,8 @@ func ParseOptions() *Options {
 	flag.StringVar(&options.CompanyID, "i", "", "公司ID号码")
 	flag.StringVar(&options.InputFile, "f", "", "包含公司ID号码的文件")
 	flag.StringVar(&options.Cookie, "c", "", "天眼查的Cookie")
-	flag.IntVar(&options.Timeout, "timeout", 15, "连接超时时间")
+	flag.IntVar(&options.Timeout, "timeout", 15, "连接超时时间(秒)")
+	flag.IntVar(&options.Delay, "delay", 0, "请求之间的延迟时间(秒)")
 	flag.StringVar(&options.Output, "o", "", "结果输出的文件(可选)")
 	flag.BoolVar(&options.Silent, "silent", false, "Silent mode")
 	flag.BoolVar(&options.NoColor, "no-color", false, "No Color")
