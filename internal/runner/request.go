@@ -10,10 +10,12 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func GetPage(url string, options *Options) requests.Response {
 
+	time.Sleep(time.Duration(options.Delay) * time.Second)
 	var transport = requests.DefaultTransport()
 	var client = &http.Client{
 		Transport: transport,
