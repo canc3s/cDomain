@@ -35,6 +35,8 @@ admin@admin cSubsidiary % go run cDomain.go -h
 Usage of cDomain:
   -c string
     	天眼查的Cookie
+  -delay int
+    	请求之间的延迟时间(秒)
   -f string
     	包含公司ID号码的文件
   -i string
@@ -48,7 +50,7 @@ Usage of cDomain:
   -silent
     	Silent mode
   -timeout int
-    	连接超时时间 (default 15)
+    	连接超时时间(秒) (default 15)
   -verbose
     	详细模式
   -version
@@ -110,4 +112,9 @@ shangtout.com
 
 还有一个工具 `cSubsidiary` 我一般两个一起使用，参考[文章](https://canc3s.github.io/2021/03/01/cSubsidiary和cDomain使用指南/)
 
+## Changelog
 
+* 增加请求延迟功能，防止触发反爬虫（-delay 默认为0，不开启）
+## Changelog请求
+## Changelogy
+## Changelog
