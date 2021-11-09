@@ -115,6 +115,3 @@ shangtout.com
 ## Changelog
 
 * 增加请求延迟功能，防止触发反爬虫（-delay 默认为0，不开启）
-## Changelog请求
-## Changelogy
-## Changelog
