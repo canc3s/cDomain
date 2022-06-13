@@ -7,7 +7,6 @@ import (
 	"golang.org/x/net/html"
 	"io/ioutil"
 	"net/http"
-	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -25,9 +24,7 @@ func GetPage(url string, options *Options) requests.Response {
 		},
 	}
 	req, _ := http.NewRequest("GET", url, nil)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (iPhone; CPU iPhone OS 14_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 MicroMessenger/7.0.18(0x17001231) NetType/4G Language/zh_CN")
-	req.Header.Set("Authorization", "0###oo34J0fXrrGHr0A8plQcS2-uWwn4###1614567391527###a851050f2a3276bd71b91b39789cda9a")
-	req.Header.Set("version", "TYC-XCX-WX")
+	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5026.0 Safari/537.36 Edg/103.0.1254.0")
 	if options.Cookie != "" {
 		req.Header.Set("Cookie", options.Cookie)
 	}
@@ -66,6 +63,11 @@ func JudgePagesK(page *html.Node) int {
 	return num
 }
 
+func JudgePagesI(page *html.Node) int {
+	list := htmlquery.Find(page, "/html/body/div/ul/li/a")
+	return len(list) - 1
+}
+
 func EnuDomainByKey(page *html.Node, domains *[]string) {
 	list := htmlquery.Find(page, "/html/body/div[2]/div/div[2]/div[1]/div[2]/div[2]/table/tbody/tr/td[5]/span")
 	for _,node  := range list {
@@ -74,9 +76,24 @@ func EnuDomainByKey(page *html.Node, domains *[]string) {
 	}
 }
 
+func GetInformation(page *html.Node) []string {
+	list := htmlquery.Find(page, "/html/body/table/tbody/tr/td[5]")
+	var domains []string
+	for _,node := range list {
+		domain := htmlquery.InnerText(node)
+		domains = append(domains, domain)
+	}
+	return domains
+}
 
-func GetDomain(options *Options) [][][]byte {
-	resp := GetPage("https://api9.tianyancha.com/services/v3/ar/icp/"+options.CompanyID+".json", options)
-	re := regexp.MustCompile(`"ym":"(.*?)"`)
-	return re.FindAllSubmatch(resp.Body,-1)
+
+func GetDomain(options *Options) []string {
+	resp := GetPage("https://www.tianyancha.com/pagination/icp.xhtml?ps=30&isAjaxLoad=true&pn=1&id="+options.CompanyID, options)
+	page := JudgePagesI(resp.Page)
+	domains := GetInformation(resp.Page)
+	for i := 2; i <= page; i++ {
+		resp := GetPage("https://www.tianyancha.com/pagination/icp.xhtml?ps=30&isAjaxLoad=true&pn="+strconv.Itoa(i)+"&id="+options.CompanyID, options)
+		domains = append(domains,GetInformation(resp.Page)...)
+	}
+	return domains
 }

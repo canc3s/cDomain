@@ -37,14 +37,7 @@ func GetDomainByKey(options *Options) []string {
 }
 
 func GetDomainByID(options *Options) []string {
-	var domains []string
-	domains1 := GetDomain(options)
-	if len(domains1) < 1 {
-		return nil
-	}
-	for _,domain := range domains1 {
-		domains = append(domains, string(domain[1]))
-	}
+	domains := GetDomain(options)
 	return domains
 }
 
